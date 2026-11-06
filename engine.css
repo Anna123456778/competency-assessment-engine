@@ -1,0 +1,185 @@
+/* Classroom Assessment Engine: stylesheet. v6.6.1-demo: smaller question and gap text, image fits the screen, list gaps fit their longest option.
+   All colours are tokens on :root, so a school can re-skin the engine by editing this block only. */
+:root {
+  --primary: #2B4C7E;     /* headings, main buttons, timer */
+  --accent: #3AA6B9;      /* answered state, focus rings, secondary buttons */
+  --highlight: #F2C14E;   /* current question, "you've got it" rows */
+  --alert: #D9534F;       /* errors, exits, emergency pause */
+  --ink: #1E2A38;
+  --muted: #5F6B7A;
+  --line: #DDE3EA;
+  --soft: #F3F6F9;
+  --white: #FFFFFF;
+  --on-accent: #0B2E36;
+  --radius: 16px;
+}
+
+* { box-sizing: border-box }
+html { -webkit-text-size-adjust: 100% }
+body { margin: 0; background: var(--white); color: var(--ink); font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 17px; line-height: 1.45 }
+#app { min-height: 100vh; display: flex; flex-direction: column }
+html:fullscreen, body:fullscreen { background: var(--white); overflow: auto }
+
+/* header and footer */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px; border-bottom: 3px solid var(--primary); background: var(--white); position: sticky; top: 0; z-index: 5 }
+.top .brand { font-weight: 800; font-size: 20px; letter-spacing: -.01em; color: var(--primary); white-space: nowrap }
+.top .brand img { height: 36px; display: block }
+.top .meta { font-weight: 600; font-size: 14px; color: var(--muted); text-align: center; flex: 1 }
+.timer { font-weight: 700; font-size: 20px; color: var(--primary); background: var(--soft); padding: 6px 14px; border-radius: 999px; min-width: 92px; text-align: center; font-variant-numeric: tabular-nums }
+.timer.warn { color: #fff; background: var(--alert) }
+.foot { margin-top: auto; padding: 16px 20px; text-align: center; font-size: 13px; color: var(--muted) }
+main { width: 100%; max-width: 880px; margin: 0 auto; padding: 24px 20px; flex: 0 0 auto; position: relative }
+
+/* cards and forms */
+.card { background: var(--white); border: 2px solid var(--line); border-radius: var(--radius); padding: 24px }
+h1 { font-size: 26px; line-height: 1.2; margin: 0 0 6px; color: var(--primary) }
+h2 { font-size: 20px; margin: 0 0 12px; color: var(--primary) }
+p { margin: 0 0 12px }
+.muted { color: var(--muted) }
+.rules { margin: 16px 0; padding: 14px 18px; background: var(--soft); border-left: 5px solid var(--accent); border-radius: 10px; font-size: 15px }
+.rules ul { margin: 6px 0 0; padding-left: 20px }
+label { display: block; font-weight: 600; margin: 16px 0 6px }
+select, input[type=text], input[type=tel] { width: 100%; font: inherit; font-size: 18px; padding: 14px; border: 2px solid var(--line); border-radius: 12px; background: #fff; color: var(--ink) }
+input.code { letter-spacing: .35em; font-weight: 700; text-align: center; font-size: 24px }
+select:focus, input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(58, 166, 185, .35) }
+.btn { display: inline-block; font: inherit; font-weight: 700; font-size: 17px; border: 0; border-radius: 12px; padding: 14px 26px; cursor: pointer; background: var(--primary); color: #fff; transition: transform .05s, opacity .15s; touch-action: manipulation }
+.btn:hover { opacity: .92 }
+.btn:active { transform: scale(.98) }
+.btn.sky { background: var(--accent); color: var(--on-accent) }
+.btn.ghost { background: #fff; color: var(--primary); border: 2px solid var(--primary) }
+.btn.warn { background: var(--alert) }
+.btn[disabled] { opacity: .45; cursor: default }
+.row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center }
+.row.end { justify-content: flex-end }
+.err { margin-top: 14px; padding: 12px 14px; border-radius: 10px; background: #FBE9E8; color: #A0322E; font-weight: 600; font-size: 15px }
+.info { margin-top: 14px; padding: 12px 14px; border-radius: 10px; background: var(--soft); color: var(--primary); font-weight: 600; font-size: 15px }
+.choices { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px }
+.choices .btn { flex: 1 1 140px }
+
+/* question navigator */
+.nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px }
+.nav button { font: inherit; font-weight: 700; font-size: 15px; width: 40px; height: 40px; border-radius: 12px; border: 2px solid var(--line); background: #fff; color: var(--muted); cursor: pointer; touch-action: manipulation }
+.nav button.ans { border-color: var(--accent); color: var(--primary); background: var(--soft) }
+.nav button.done { background: var(--primary); border-color: var(--primary); color: #fff }
+.nav button.cur { box-shadow: 0 0 0 3px var(--highlight); border-color: var(--primary) }
+
+/* question */
+.qnum { font-weight: 700; color: var(--alert); font-size: 14px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px }
+.qtext { font-size: 19px; font-weight: 600; line-height: 1.35; margin-bottom: 12px; white-space: pre-line }
+.qimg { display: block; max-width: 100%; max-height: min(240px, 32vh); margin: 12px auto 16px; border-radius: 12px; object-fit: contain }
+.opt { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; font: inherit; font-size: 17px; padding: 14px 16px; margin-bottom: 10px; border: 2px solid var(--line); border-radius: 14px; background: #fff; color: var(--ink); cursor: pointer; touch-action: manipulation }
+.opt .l { flex: 0 0 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; background: var(--soft); color: var(--primary) }
+.opt.sel { border-color: var(--primary); background: #EAF0F8 }
+.opt.sel .l { background: var(--primary); color: #fff }
+.opt.locked { cursor: default }
+.opt.locked:not(.sel) { opacity: .55 }
+.opt .oimg { display: block; max-width: 100%; max-height: 130px; margin: 6px auto 0; object-fit: contain }
+.opts.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px }
+.opts.grid .opt { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; margin: 0; width: 100%; text-align: center }
+.opts.grid .opt .l { align-self: flex-start }
+.lockmsg { font-size: 14px; color: var(--muted); margin: 2px 0 0 }
+.actions { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 16px }
+.actions .grp { display: flex; gap: 12px; flex-wrap: wrap }
+
+/* matching task */
+.mwrap { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 12px 0 }
+.mcol h3 { margin: 0 0 8px; font-size: 15px; color: var(--primary) }
+.mrow { display: flex; align-items: center; gap: 10px; padding: 10px 12px; margin: 0 0 8px; border: 2px solid var(--line); border-radius: 12px }
+.mrow .l, .mright .l { flex: 0 0 auto; font-weight: 700; color: var(--primary) }
+.mrow .mt { flex: 1 1 auto }
+.mrow select { flex: 0 0 auto; width: auto; min-width: 72px; margin: 0; font-size: 17px; font-weight: 600; padding: 8px 10px }
+.mrow.set { border-color: var(--accent) }
+.mright { padding: 10px 12px; margin: 0 0 8px; border: 2px dashed var(--line); border-radius: 12px; display: flex; gap: 10px; align-items: center }
+.mrow img, .mright img { max-width: 120px; max-height: 90px; object-fit: contain }
+
+/* number task */
+.numwrap { display: flex; align-items: center; gap: 10px; margin: 14px 0 }
+.numwrap input { max-width: 200px; font-size: 24px; font-weight: 600; text-align: center; letter-spacing: 2px; margin: 0 }
+.numwrap .unit { font-size: 18px; color: var(--primary) }
+
+/* fill-in-the-gaps task */
+.fwrap { margin: 12px 0 }
+.frow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 7px 12px; margin: 0 0 8px; border: 2px solid var(--line); border-radius: 12px; font-size: 17px; font-weight: 500; line-height: 1.4 }
+.frow.set { border-color: var(--accent) }
+.frow input, .frow select { width: 72px; min-width: 0; margin: 0; padding: 6px 4px; font-size: 22px; font-weight: 700; text-align: center; border: 2px solid var(--primary); border-radius: 10px }
+/* list gaps: as wide as the longest option, so the chosen value is never cut */
+.frow select { width: auto; max-width: 100%; font-size: 16px; font-weight: 600; text-align: left; padding: 6px 30px 6px 10px }
+
+/* confirmation dialog */
+.modal { position: fixed; inset: 0; background: rgba(20, 32, 48, .55); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 20 }
+.modal .card { max-width: 480px; width: 100% }
+
+/* emergency pause */
+.alarm { margin-left: 10px; padding: 8px 14px; border: none; border-radius: 10px; background: var(--alert); color: #fff; font: inherit; font-weight: 700; font-size: 15px; cursor: pointer; white-space: nowrap }
+.alarm:hover { filter: brightness(.95) }
+.pausebox { text-align: center }
+.pausebox .ptime { font-size: 40px; font-weight: 700; color: var(--alert); margin: 10px 0 18px; letter-spacing: 2px }
+.pausebox input { max-width: 220px; margin: 6px auto 0; display: block; text-align: center }
+
+/* exit and lock screens */
+.exitbox { text-align: center }
+.exitbox h1 { color: var(--alert) }
+.exitbox.ok h1 { color: var(--primary) }
+.exitbox .ecount { font-size: 34px; font-weight: 700; color: var(--primary); margin: 8px 0 14px }
+.exitbox input { max-width: 220px; margin: 6px auto 0; display: block; text-align: center }
+
+/* intro text on the sign-in screen (D.intro) */
+.intro { margin: 14px 0 4px; font-size: 16px }
+.intro p { white-space: pre-line }
+
+/* question image: click or tap to enlarge */
+.qimgwrap { margin: 8px 0 12px; text-align: center }
+.qimgwrap .qimg { margin: 0 auto 6px }
+.qimg.zoomable { cursor: zoom-in }
+.qimg.zoomable:focus { outline: 3px solid var(--accent); outline-offset: 3px }
+.imghint { font-size: 14px; color: var(--muted); margin: 0 }
+.imgzoom { position: fixed; inset: 0; z-index: 30; background: rgba(20, 32, 48, .92); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 16px; cursor: zoom-out }
+.imgzoom img { max-width: 100%; max-height: calc(100vh - 110px); object-fit: contain; border-radius: 10px; background: #fff }
+.imgzoom .btn { background: #fff; color: var(--primary) }
+.imgzoom .zscroll { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch }
+.imgzoom .zhint { display: none; margin: 0; color: #fff; font-size: 15px }
+@media (orientation: portrait) and (max-width: 700px) {
+  .imgzoom .zscroll { width: 100% }
+  .imgzoom img { width: 200vw; max-width: none; max-height: none }
+  .imgzoom .zhint { display: block }
+}
+
+/* result */
+.result { text-align: center }
+.badge { display: inline-block; font-size: 30px; font-weight: 700; padding: 12px 32px; border-radius: 999px; margin: 10px 0 18px; color: #fff; background: var(--primary) }
+.badge.l0 { background: var(--alert) }
+.badge.l1 { background: #D9902F }
+.badge.l2 { background: var(--accent); color: var(--on-accent) }
+.badge.l3 { background: var(--primary) }
+.stat { font-size: 20px; font-weight: 600; margin-bottom: 10px }
+.tophead { margin: 22px 0 0; color: var(--primary); font-size: 17px }
+.topics { width: 100%; border-collapse: collapse; margin: 18px 0 6px; text-align: left; font-size: 15px }
+.topics th { color: var(--primary); font-weight: 600; padding: 8px 10px; border-bottom: 2px solid var(--accent) }
+.topics td { padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+.topics .fb { margin-top: 4px; font-size: 14px; line-height: 1.45; color: var(--muted) }
+.topics .st { white-space: nowrap; font-weight: 600 }
+.topics tr.s2 .st { color: var(--primary) }
+.topics tr.s1 .st { color: var(--primary); opacity: .8 }
+.topics tr.s0 .st { color: var(--alert) }
+.topics tr.win td { background: #FDF3D6 }
+.topics .num { white-space: nowrap; text-align: right; font-weight: 600; color: var(--primary) }
+.topics tr.tot td { font-weight: 700; border-top: 2px solid var(--accent); border-bottom: none; font-size: 17px }
+
+@media (max-width: 640px) {
+  .mwrap { grid-template-columns: 1fr }
+}
+@media (max-width: 600px) {
+  body { font-size: 16px }
+  main { padding: 16px 14px }
+  .card { padding: 18px }
+  .qtext { font-size: 17px }
+  .opt { font-size: 16px }
+  .frow { font-size: 16px; padding: 10px 12px }
+  .frow select { font-size: 15px }
+  .top { padding: 10px 14px }
+  .top .brand img { height: 30px }
+  .top .brand { font-size: 16px; min-width: 0; overflow: hidden; text-overflow: ellipsis }
+  .timer { font-size: 17px; min-width: 0; padding: 5px 10px }
+  .alarm { margin-left: 6px; padding: 7px 10px; font-size: 14px }
+  .top .meta { display: none }
+}
